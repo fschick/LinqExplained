@@ -23,85 +23,85 @@ namespace FS.LinqExplained
             #region V1
             // V1: Framework and business logic combined into one function.
             var frameworkV1 = new V1.Framework();
-            frameworkV1.Filter(list, "StartWith", "man").Dump();
-            frameworkV1.Filter(list, "Contains", "man").Dump();
+            frameworkV1.Filter(list, "StartWith", "man").Dump("V1 StartWith");
+            frameworkV1.Filter(list, "Contains", "man").Dump("V1 Contains");
             #endregion
 
             #region V2
             // V1: Business logic moved to separate class.
             var frameworkV2 = new V2.Framework();
-            frameworkV2.Filter(list, "StartWith", "man").Dump();
-            frameworkV2.Filter(list, "Contains", "man").Dump();
+            frameworkV2.Filter(list, "StartWith", "man").Dump("V2 StartWith");
+            frameworkV2.Filter(list, "Contains", "man").Dump("V2 Contains");
             #endregion
 
             #region V3
             // V3: Delegate for filter functions created. Loops combined.
             var frameworkV3 = new V3.Framework();
-            frameworkV3.Filter(list, "StartWith", "man").Dump();
-            frameworkV3.Filter(list, "Contains", "man").Dump();
+            frameworkV3.Filter(list, "StartWith", "man").Dump("V3 StartWith");
+            frameworkV3.Filter(list, "Contains", "man").Dump("V3 Contains");
             #endregion
 
             #region V4
             // V4: Parameter 'filterFunction' replaced by delegate.
             var frameworkV4 = new V4.Framework();
-            frameworkV4.Filter(list, BusinessLogic.StartsWith, "man").Dump();
-            frameworkV4.Filter(list, BusinessLogic.Contains, "man").Dump();
+            frameworkV4.Filter(list, BusinessLogic.StartsWith, "man").Dump("V4 StartWith");
+            frameworkV4.Filter(list, BusinessLogic.Contains, "man").Dump("V4 Contains");
             #endregion
 
             #region V5
             // V5: Parameter 'filterFunction' replaced by inline function.
             var frameworkV5 = new V5.Framework();
-            frameworkV5.Filter(list, (string item, string filter) => item.StartsWith(filter), "man").Dump();
-            frameworkV5.Filter(list, (string item, string filter) => item.Contains(filter), "man").Dump();
+            frameworkV5.Filter(list, (string item, string filter) => item.StartsWith(filter), "man").Dump("V5 StartWith");
+            frameworkV5.Filter(list, (string item, string filter) => item.Contains(filter), "man").Dump("V5 Contains");
             #endregion
 
             #region V6
             // V6: Parameter 'filter' (re)moved to inline function.
             var frameworkV6 = new V6.Framework();
-            frameworkV6.Filter(list, (string item) => item.StartsWith("man")).Dump();
-            frameworkV6.Filter(list, (string item) => item.Contains("man")).Dump();
+            frameworkV6.Filter(list, (string item) => item.StartsWith("man")).Dump("V6 StartWith");
+            frameworkV6.Filter(list, (string item) => item.Contains("man")).Dump("V6 Contains");
             #endregion
 
             #region V7
             // V7A: Type of list made generic. Inline function simplified.
             var frameworkV7A = new V7A.Framework();
-            frameworkV7A.Filter(list, (item) => item.StartsWith("man")).Dump();
-            frameworkV7A.Filter(list, (item) => item.Contains("man")).Dump();
+            frameworkV7A.Filter(list, (item) => item.StartsWith("man")).Dump("V7A StartWith");
+            frameworkV7A.Filter(list, (item) => item.Contains("man")).Dump("V7A Contains");
 
             // V7B: Return type of delegate made generic. Inline function simplified.
             var frameworkV7B = new V7B.Framework();
-            frameworkV7B.Filter(list, item => item.StartsWith("man")).Dump();
-            frameworkV7B.Filter(list, item => item.Contains("man")).Dump();
+            frameworkV7B.Filter(list, item => item.StartsWith("man")).Dump("V7B StartWith");
+            frameworkV7B.Filter(list, item => item.Contains("man")).Dump("V7B Contains");
 
             // V7C: Type parameters marked as co-variant/contra-variant.
             // Covariance: Enables you to use a more derived type than originally specified.
             // Contravariance: Enables you to use a more generic(less derived) type than originally specified.
             var frameworkV7C = new V7C.Framework();
-            frameworkV7C.Filter(list, item => item.StartsWith("man")).Dump();
-            frameworkV7C.Filter(list, item => item.Contains("man")).Dump();
+            frameworkV7C.Filter(list, item => item.StartsWith("man")).Dump("V7C StartWith");
+            frameworkV7C.Filter(list, item => item.Contains("man")).Dump("V7C Contains");
             #endregion
 
             #region V8
             // V8: Delegate replace by Func<,>.
             var frameworkV8 = new V8.Framework();
-            frameworkV8.Filter(list, item => item.StartsWith("man")).Dump();
-            frameworkV8.Filter(list, item => item.Contains("man")).Dump();
+            frameworkV8.Filter(list, item => item.StartsWith("man")).Dump("V8 StartWith");
+            frameworkV8.Filter(list, item => item.Contains("man")).Dump("V8 Contains");
             #endregion
 
             #region V9
             // V9: Switch to extension method
-            V9.Framework.Filter(list, item => item.StartsWith("man")).Dump();
-            V9.Framework.Filter(list, item => item.Contains("man")).Dump();
-            //list.Filter(item => item.Contains("man")).Dump();
+            V9.Framework.Filter(list, item => item.StartsWith("man")).Dump("V9 StartWith");
+            V9.Framework.Filter(list, item => item.Contains("man")).Dump("V9 Contains");
+            //list.Filter(item => item.Contains("man")).Dump("V1 StartWith");
             #endregion
 
             #region V10
             // V10: 'Filter' renamed to 'Where'
-            V10.Framework.Where(list, item => item.StartsWith("man")).Dump();
-            V10.Framework.Where(list, item => item.Contains("man")).Dump();
+            V10.Framework.Where(list, item => item.StartsWith("man")).Dump("V10 StartWith");
+            V10.Framework.Where(list, item => item.Contains("man")).Dump("V10 Contains");
 
-            list.Where(item => item.StartsWith("man")).Dump();
-            list.Where(item => item.StartsWith("man")).Dump();
+            list.Where(item => item.StartsWith("man")).Dump(".NET Core StartsWith");
+            list.Where(item => item.Contains("man")).Dump(".NET Core Contains");
             #endregion
         }
     }

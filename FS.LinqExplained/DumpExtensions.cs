@@ -5,9 +5,10 @@ namespace FS.LinqExplained
 {
     public static class DumpExtensions
     {
-        public static void Dump(this IEnumerable<string> content)
+        public static void Dump(this IEnumerable<string> content, string caption = null)
         {
-            Console.WriteLine(content.GetType().Name);
+            caption ??= content.GetType().Name;
+            Console.WriteLine(caption);
             foreach (var line in content)
                 Console.WriteLine($"\t{line}");
             Console.WriteLine();
