@@ -13,5 +13,13 @@ namespace FS.LinqExplained
                 Console.WriteLine($"\t{line}");
             Console.WriteLine();
         }
+
+        public static void Dump(this string content, string caption = null)
+        {
+            caption ??= content.GetType().Name;
+            Console.WriteLine(caption);
+            Console.WriteLine($"\t{content}");
+            Console.WriteLine();
+        }
     }
 }

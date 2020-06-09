@@ -1,7 +1,9 @@
 ﻿using FS.LinqExplained;
+using Humanizer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace FS.LinqExplained
 {
@@ -102,6 +104,12 @@ namespace FS.LinqExplained
 
             list.Where(item => item.StartsWith("man")).Dump(".NET Core StartsWith");
             list.Where(item => item.Contains("man")).Dump(".NET Core Contains");
+            #endregion
+
+            #region V11
+            //V11.Framework.Where(list, item => item.StartsWith("man")).Dump("results in");
+            //V11.Framework.Where(list, item => item.StartsWith("man") || item.Contains("beziehung")).Dump("results in");
+            //V11.Framework.Where(list, item => item.StartsWith("man") && item.Contains("wühlt")).Dump("results in");
             #endregion
         }
     }
@@ -416,6 +424,86 @@ namespace V10
             }
 
             return result;
+        }
+    }
+}
+#endregion
+
+#region V11
+namespace V11
+{
+    public static class Framework
+    {
+        public static IEnumerable<TItem> Where<TItem>(this IEnumerable<TItem> list, Expression<Func<TItem, bool>> filterExpression)
+        {
+            var result = new List<TItem>();
+
+            var filterDescription = GetExpressionDescription(filterExpression);
+            filterDescription.Dump("V11 Filters the the list as follow");
+
+            var filterFunction = filterExpression.Compile();
+            foreach (var item in list)
+            {
+                var isMatch = filterFunction(item);
+                if (isMatch)
+                    result.Add(item);
+            }
+
+            return result;
+        }
+
+        private static string GetExpressionDescription(Expression expression)
+        {
+            switch (expression)
+            {
+                case LambdaExpression lambdaExpression:
+                    return GetLambdaExpressionDescription(lambdaExpression);
+                case MethodCallExpression methodCallExpression:
+                    return GetMethodCallDescription(methodCallExpression);
+                case BinaryExpression binaryExpression:
+                    return GetLogicalOperationDescription(binaryExpression);
+                default:
+                    throw new NotSupportedException($"Expressions of type {expression.GetType()} are currently unsupported");
+            }
+        }
+
+        private static string GetLambdaExpressionDescription(LambdaExpression lambdaExpression)
+        {
+            var parameterDescription = lambdaExpression.Parameters[0].Name;
+            var bodyDescription = GetExpressionDescription(lambdaExpression.Body);
+            return $"{parameterDescription} {bodyDescription}";
+        }
+
+        private static string GetMethodCallDescription(MethodCallExpression methodCallExpression)
+        {
+            if (methodCallExpression.Arguments.Count > 1)
+                throw new NotSupportedException("Methods calls with none or more than one argument currently unsupported");
+
+            string argument;
+            var argumentExpression = methodCallExpression.Arguments[0];
+            switch (argumentExpression)
+            {
+                case ConstantExpression constantExpression:
+                    argument = constantExpression.Value.ToString();
+                    break;
+                default:
+                    throw new NotSupportedException($"Arguments of type {argumentExpression.GetType()} for method calls currently unsupported");
+            }
+
+            return $"{methodCallExpression.Method.Name.Humanize(LetterCasing.LowerCase)} \"{argument}\"";
+        }
+
+        private static string GetLogicalOperationDescription(BinaryExpression binaryExpression)
+        {
+            switch (binaryExpression.NodeType)
+            {
+                case ExpressionType.OrElse:
+                    return $"{GetExpressionDescription(binaryExpression.Left)} or {GetExpressionDescription(binaryExpression.Right)}";
+                case ExpressionType.AndAlso:
+                    return $"{GetExpressionDescription(binaryExpression.Left)} and {GetExpressionDescription(binaryExpression.Right)}";
+                default:
+                    throw new NotSupportedException($"Binary expressions of type {binaryExpression.NodeType} are currently unsupported");
+            }
         }
     }
 }
