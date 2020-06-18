@@ -5,6 +5,7 @@
         public static void Main()
         {
             LinqExplained.Execute();
+            ExpressionsExplained.Execute();
         }
     }
 }
