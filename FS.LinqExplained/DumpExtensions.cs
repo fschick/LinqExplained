@@ -5,7 +5,7 @@ namespace FS.LinqExplained
 {
     public static class DumpExtensions
     {
-        public static void Dump(this IEnumerable<string> content, string caption = null)
+        public static void Dump<TContent>(this IEnumerable<TContent> content, string caption = null)
         {
             caption ??= content.GetType().Name;
             Console.WriteLine(caption);
@@ -14,7 +14,7 @@ namespace FS.LinqExplained
             Console.WriteLine();
         }
 
-        public static void Dump(this string content, string caption = null)
+        public static void Dump<TContent>(this TContent content, string caption = null)
         {
             caption ??= content.GetType().Name;
             Console.WriteLine(caption);
